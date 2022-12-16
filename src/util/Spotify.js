@@ -23,17 +23,15 @@ const Spotify = {
             window.location = accessUrl;
         }
     },
-    search(term){
+     search(term){
         const accessToken = Spotify.getAccessToken();
-        return fetch(`https://api.spotify.com/v1/search?type=track&q=${term}`,
-        {headers: {
-            Authorization: `Bearer ${accessToken}`
-        }
-    }).then(response => {
-        return response.json();
-    }).then(jsonResponse => {
-        if(!jsonResponse.tracks){
-            return[];
+        const response =  fetch(`https://api.spotify.com/v1/search?type=track&q=${term}`,
+            {
+                headers: { Authorization: `Bearer ${accessToken}` }
+            });
+        const jsonResponse = response.json();
+        if (!jsonResponse.tracks) {
+            return [];
         }
         return jsonResponse.tracks.items.map(track => ({
             id: track.id,
@@ -41,8 +39,8 @@ const Spotify = {
             artist: track.artists[0].name,
             album: track.album.name,
             uri: track.uri
-        }))
-    })
+        })
+        );
     },
     savePlayList(name, trackUris){
         if(!name || !trackUris.length){
